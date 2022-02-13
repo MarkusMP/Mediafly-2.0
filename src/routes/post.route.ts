@@ -5,6 +5,7 @@ import {
   fetchAllPostsByProfileId,
   fetchPostById,
   deletePost,
+  fetchPosts,
 } from "../controllers/post.controller";
 import {
   createPostSchema,
@@ -24,5 +25,6 @@ router
     fetchAllPostsByProfileId
   )
   .get("/:postId", validate(fetchPostByidSchema), fetchPostById)
-  .delete("/:postId", protect, validate(deletePostSchema), deletePost);
+  .delete("/:postId", protect, validate(deletePostSchema), deletePost)
+  .get("/", fetchPosts);
 export default router;

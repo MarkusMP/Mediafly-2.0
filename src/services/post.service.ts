@@ -67,6 +67,30 @@ export const getPostById = async (postId) => {
   }
 };
 
+export const getPosts = async () => {
+  try {
+    const posts = await getRepository(Post)
+      .createQueryBuilder("post")
+      .leftJoinAndSelect("post.profile", "profile")
+      .loadRelationCountAndMap("post.likesCount", "post.likes")
+      .select([
+        "post.text",
+        "post.image",
+        "post.id",
+        "profile_id",
+        "profile.username",
+        "profile.profile_image",
+        "profile.id",
+        "post.created_at",
+      ])
+      .getMany();
+
+    return posts;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 export const postDelete = async (postId, profileId) => {
   try {
     return await createQueryBuilder()

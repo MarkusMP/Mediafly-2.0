@@ -90,6 +90,13 @@ test("Should fetch one post by postId", async () => {
   expect(post.body.text).toBe(newPost.body.text);
 });
 
+test("Should fetch all posts", async () => {
+  const posts = await request(server).get("/api/post");
+
+  expect(posts.status).toBe(200);
+  expect(posts.body).toHaveLength(2);
+});
+
 test("Should delete post by postId", async () => {
   const loginOne = await request(server)
     .post("/api/user/login")

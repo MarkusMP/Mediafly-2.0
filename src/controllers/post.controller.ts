@@ -5,6 +5,7 @@ import {
   getAllPostsByProfileId,
   getPostById,
   postDelete,
+  getPosts,
 } from "../services/post.service";
 
 // @route   POST api/post
@@ -19,6 +20,19 @@ const createPost = async (req: IGetUserAuthInfoRequest, res: Response) => {
     res.status(200).json(post);
   } else {
     res.status(409).json({ messsage: "Failed to create post" });
+  }
+};
+
+// @route   GET api/post
+// @desc    fetch all posts
+// @access  Public
+const fetchPosts = async (req: Request, res: Response) => {
+  const posts = await getPosts();
+
+  if (posts) {
+    res.status(200).json(posts);
+  } else {
+    res.status(409).json({ messsage: "Failed to fetch posts" });
   }
 };
 
@@ -69,4 +83,10 @@ const deletePost = async (req: IGetUserAuthInfoRequest, res: Response) => {
   }
 };
 
-export { fetchPostById, fetchAllPostsByProfileId, createPost, deletePost };
+export {
+  fetchPostById,
+  fetchAllPostsByProfileId,
+  createPost,
+  deletePost,
+  fetchPosts,
+};
