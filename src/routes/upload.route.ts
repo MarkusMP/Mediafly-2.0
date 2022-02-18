@@ -2,11 +2,13 @@ import path from "path";
 import express, { Request, Response } from "express";
 import multer from "multer";
 import { IGetFileInfoRequest } from "../utils/definitionFile";
-
+import fs from "fs";
 const router = express.Router();
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
+    const path = `./uploads`;
+    fs.mkdirSync(path, { recursive: true });
     cb(null, "./uploads/");
   },
   filename(req, file, cb) {
