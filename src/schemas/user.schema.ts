@@ -9,8 +9,8 @@ const params = {
 export const createUserSchema = object({
   body: object({
     username: string().required("Username is required"),
-    firstName: string().required("First name is required"),
-    lastName: string().required("Last name is required"),
+    firstName: string(),
+    lastName: string(),
     email: string().email("Email is invalid").required("Email is required"),
     password: string()
       .required()

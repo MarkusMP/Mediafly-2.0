@@ -19,6 +19,8 @@ const registerUser = async (req: Request, res: Response) => {
   const { username, firstName, lastName, email, password, profile_image } =
     req.body;
 
+  console.error("hello");
+
   const userExistsUsername = await Profile.findOne({ username });
   const userExistsEmail = await User.findOne({ email });
 
