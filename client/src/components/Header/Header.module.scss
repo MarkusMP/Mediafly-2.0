@@ -1,0 +1,98 @@
+@use "../../styles/breakpoints";
+@use "../../styles/colors";
+@use "../../styles/global";
+@use "../../styles/buttons";
+
+header {
+  padding-left: 15px;
+  padding-right: 15px;
+  background-color: colors.$fourth;
+  border-bottom: 1px solid colors.$third;
+
+  height: 8vh;
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    background-color: colors.$fourth;
+
+    .logo {
+      li {
+        a {
+          font-size: 1.5rem;
+          font-weight: bold;
+          color: colors.$primary;
+          text-decoration: none;
+          margin-right: 1rem;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .menu {
+      display: none;
+    }
+
+    .links {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      li {
+        list-style: none;
+        a {
+          text-decoration: none;
+          color: colors.$primary;
+          display: flex;
+          align-items: center;
+          padding: 0.5rem 1rem;
+
+          svg {
+            margin-right: 5px;
+          }
+
+          &:hover {
+            color: colors.$secondary;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: breakpoints.$tablet) {
+  header {
+    .navigation {
+      .links {
+        position: absolute;
+        background-color: colors.$fourth;
+        top: 8vh;
+        width: 100%;
+        flex-direction: column;
+        left: 0;
+        border-bottom: 1px solid colors.$third;
+        padding: 15px 0;
+      }
+
+      .open {
+        display: flex;
+      }
+      .close {
+        display: none;
+      }
+
+      .menu {
+        display: flex;
+        button {
+          display: flex;
+          justify-content: center;
+          background-color: colors.$fourth;
+          cursor: pointer;
+          border: none;
+          font-size: 1.5rem;
+          padding: 0;
+        }
+      }
+    }
+  }
+}
