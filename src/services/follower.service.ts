@@ -17,7 +17,7 @@ export const followUser = async (followerId, followingId) => {
 
     return followUser;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -34,7 +34,7 @@ export const unFollowUser = async (followerId, followingId) => {
 
     return unfollowUser;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -48,7 +48,7 @@ export const getFollowersByProfileId = async (profileId) => {
       .getRawMany();
     return followers;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -62,6 +62,6 @@ export const getFollowingProfileById = async (profileId) => {
       .getRawMany();
     return followers;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };

@@ -7,9 +7,18 @@
   left: 0;
   right: 0;
   top: 10%;
+  max-width: 470px;
+  padding: 15px 10px 15px 50px;
+}
+
+.error {
   background-color: #ffbaba;
   color: colors.$error;
   border: 1px solid colors.$error;
-  max-width: 470px;
-  padding: 15px 10px 15px 50px;
+}
+
+.success {
+  background-color: #dff0d8;
+  color: colors.$success;
+  border: 1px solid colors.$success;
 }

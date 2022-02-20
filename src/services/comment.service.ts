@@ -16,7 +16,7 @@ export const commentCreate = async (postId, text, profileId) => {
 
     return comment.raw[0];
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -31,7 +31,7 @@ export const getAllCommentsByPostId = async (postId) => {
 
     return comments;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -44,7 +44,7 @@ export const getCommentByid = async (commentId) => {
 
     return comment;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -57,6 +57,6 @@ export const commentDelete = async (commentId, profileId) => {
       .andWhere("profile_id = :profileId", { profileId })
       .execute();
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };

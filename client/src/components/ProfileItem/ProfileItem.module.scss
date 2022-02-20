@@ -1,0 +1,103 @@
+@use "../../styles/colors";
+@use "../../styles/buttons";
+@use "../../styles/breakpoints";
+
+.card {
+  background-color: colors.$fourth;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  z-index: 1;
+  margin-top: 20px;
+
+  .container {
+    max-width: 400px;
+    padding-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .bold {
+      font-weight: bold;
+    }
+
+    img {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 10px solid darken(colors.$fourth, 3%);
+      object-fit: cover;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    h3 {
+      color: lighten(colors.$fifth, 30%);
+    }
+
+    .bio {
+      font-size: 16px;
+      margin-top: 1rem;
+    }
+
+    .date {
+      padding-top: 20px;
+    }
+
+    .stats {
+      .stat {
+        display: flex;
+        justify-content: space-between;
+
+        a {
+          color: colors.$fifth;
+        }
+
+        p {
+          padding-left: 20px;
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    .btns {
+      display: flex;
+      padding-top: 10px;
+
+      button {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+@media (max-width: breakpoints.$mobile) {
+  .card {
+    .container {
+      .stats {
+        .stat {
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-start;
+          padding-left: 0;
+          padding-top: 20px;
+        }
+      }
+      .btns {
+        flex-direction: column;
+        width: 100%;
+        button {
+          margin-top: 20px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

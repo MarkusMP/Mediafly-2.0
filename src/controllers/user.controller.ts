@@ -16,7 +16,7 @@ import { Profile } from "../entities/profile.entity";
 // @desc    Register user & get token
 // @access  Public
 const registerUser = async (req: Request, res: Response) => {
-  const { username, firstName, lastName, email, password, profile_image } =
+  const { username, firstName, lastName, email, password, profile_image, bio } =
     req.body;
 
   console.error("hello");
@@ -40,6 +40,7 @@ const registerUser = async (req: Request, res: Response) => {
     lastName,
     email,
     password,
+    bio,
     profile_image,
   });
 

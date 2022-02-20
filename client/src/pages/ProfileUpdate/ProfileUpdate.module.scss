@@ -1,0 +1,20 @@
+@use "../../styles/buttons";
+@use "../../styles/form";
+@use "../../styles/global";
+@use "../../styles/colors";
+
+section {
+  h1 {
+    padding-top: 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: colors.$primary;
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+}
+
+.btn {
+  width: 100%;
+}

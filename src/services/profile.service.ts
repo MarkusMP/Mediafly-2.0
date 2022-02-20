@@ -14,7 +14,7 @@ export const getProfileById = async (profileId) => {
 
     return profile;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -31,7 +31,7 @@ export const getProfileByUsername = async (username) => {
 
     return profile;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -44,7 +44,7 @@ export const getUsernameExists = async (username) => {
 
     return exists;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -70,6 +70,6 @@ export const profileUpdate = async (updatedProfile) => {
 
     return updated.raw[0];
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };

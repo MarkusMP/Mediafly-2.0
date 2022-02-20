@@ -37,7 +37,7 @@ const fetchProfileByUsername = async (req: Request, res: Response) => {
   }
 };
 
-// @route   POST api/profile
+// @route   PUT api/profile
 // @desc    Update Profile
 // @access  Public
 const updateProfile = async (req: IGetUserAuthInfoRequest, res: Response) => {

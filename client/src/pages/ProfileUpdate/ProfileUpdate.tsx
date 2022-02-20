@@ -1,50 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
-import styles from "./Register.module.scss";
+import styles from "./ProfileUpdate.module.scss";
 import axios from "axios";
 import Back from "../../components/Back/Back";
 import Message from "../../components/Message/Message";
-import { register, reset } from "../../features/auth/authSlice";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { updateProfile } from "../../features/profile/profileSlice";
 
-interface IRegister {
+interface IUpdate {
   username: string;
-  password: string;
-  email: string;
   firstName: string;
   lastName: string;
   profile_image: string;
   bio: string;
 }
 
-const Register = () => {
-  const [formData, setFormData] = useState<IRegister>({
+const ProfileUpdate = () => {
+  const [formData, setFormData] = useState<IUpdate>({
     username: "",
-    password: "",
-    email: "",
     firstName: "",
     lastName: "",
     profile_image: "",
     bio: "",
   });
-  const [message, setMessage] = useState<string>("");
   const dispatch = useAppDispatch();
-  const auth = useAppSelector((state) => state.auth);
   const navigate = useNavigate();
+  const { profile, isError, message, isLoading, isSuccess } = useAppSelector(
+    (state) => state.profile
+  );
+  const auth = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    dispatch(reset());
-    if (auth && auth.isError === true && auth.message) {
-      setMessage(auth.message);
+    if (profile) {
+      setFormData({
+        username: profile.username,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        profile_image: profile.profile_image,
+        bio: profile.bio,
+      });
     }
-    if (auth.user) {
-      navigate("/");
+    if (isSuccess && !isError && !message && !isLoading) {
+      navigate("/myprofile");
     }
-  }, [auth, dispatch, navigate]);
+  }, [profile, dispatch, isError, message, isLoading, isSuccess, navigate]);
 
-  const { username, password, email, firstName, lastName, profile_image, bio } =
-    formData;
+  const { username, firstName, lastName, profile_image, bio } = formData;
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -77,17 +79,29 @@ const Register = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setMessage("");
-    dispatch(register(formData));
+    if (auth.user) {
+      const newUsername = username === profile?.username ? "" : username;
+
+      dispatch(
+        updateProfile({
+          username: newUsername,
+          firstName,
+          lastName,
+          profile_image,
+          bio,
+          token: auth.user.token,
+        })
+      );
+    }
   };
   return (
     <>
-      {message && <Message message={message} error={true} />}
+      {message && isError && <Message message={message} error={true} />}
       <div className={styles.container}>
         <Back />
         <section>
           <h1>
-            <FaUser /> Register
+            <FaUser /> Update Profile
           </h1>
         </section>
         <section className={styles.form}>
@@ -100,67 +114,42 @@ const Register = () => {
                 id="username"
                 name="username"
                 value={username}
-                placeholder="Enter your username"
+                placeholder="Enter your updated username"
                 required
                 onChange={onChange}
               />
             </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="email">Email</label>
 
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={email}
-                placeholder="Enter your email"
-                required
-                onChange={onChange}
-              />
-            </div>
             <div className={styles.formGroup}>
-              <label htmlFor="password">Password</label>
-
-              <input
-                type="password"
-                id="password"
-                name="password"
-                value={password}
-                placeholder="Enter your password"
-                required
-                onChange={onChange}
-              />
-            </div>
-            <div className={styles.formGroup}>
-              <label htmlFor="firstName">First Name (optional)</label>
+              <label htmlFor="firstName">First Name </label>
 
               <input
                 type="text"
                 id="firstName"
                 name="firstName"
                 value={firstName}
-                placeholder="Enter your first name"
+                placeholder="Enter your updated first name"
                 onChange={onChange}
               />
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="lastName">Last Name (optional)</label>
+              <label htmlFor="lastName">Last Name </label>
               <input
                 type="text"
                 id="lastName"
                 name="lastName"
                 value={lastName}
-                placeholder="Enter your last name"
+                placeholder="Enter your updated last name"
                 onChange={onChange}
               />
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="bio">Bio (optional)</label>
+              <label htmlFor="bio">Bio </label>
               <textarea
                 id="bio"
                 name="bio"
                 value={bio}
-                placeholder="Enter your bio"
+                placeholder="Enter your updated bio"
                 onChange={(e) =>
                   setFormData((prevState) => ({
                     ...prevState,
@@ -170,15 +159,13 @@ const Register = () => {
               />
             </div>
             <div className={styles.formGroup}>
-              <label htmlFor="profileImage">
-                Choose a profile image (optional)
-              </label>
+              <label htmlFor="profileImage">Choose a profile image</label>
               <input
                 type="text"
                 id="profileImage"
                 name="profile_image"
                 value={profile_image}
-                placeholder="Enter image url"
+                placeholder="Enter your updated image url"
                 onChange={onChange}
               />
               <input
@@ -192,17 +179,14 @@ const Register = () => {
 
             <div className={styles.formGroup}>
               <button type="submit" className={styles.btn}>
-                Register
+                Update
               </button>
             </div>
           </form>
-          <p>
-            Already have an account? <Link to="/login">Login</Link>
-          </p>
         </section>
       </div>
     </>
   );
 };
 
-export default Register;
+export default ProfileUpdate;

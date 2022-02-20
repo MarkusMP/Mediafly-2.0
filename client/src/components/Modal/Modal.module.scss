@@ -1,0 +1,26 @@
+@use "../../styles/colors";
+@use "../../styles/buttons";
+
+.modalWindow {
+  position: absolute;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  top: 0;
+  height: 100vh;
+
+  .modal {
+    background-color: #fff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px 30px;
+    font-size: 18px;
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 10px;
+    }
+  }
+}

@@ -15,7 +15,7 @@ export const postLike = async (postId, profileId) => {
 
     return likedPost;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -30,7 +30,7 @@ export const unlikePost = async (profileId, postId) => {
 
     return unfollowUser;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -47,7 +47,7 @@ export const commentLike = async (profileId, commentId) => {
       .execute();
     return likedComment;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -62,6 +62,6 @@ export const commentUnlike = async (profileId, commentId) => {
 
     return unfollowUser;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };

@@ -3,9 +3,10 @@ import styles from "./Message.module.scss";
 
 interface IMessageProps {
   message: string;
+  error: boolean;
 }
 
-const Message = ({ message }: IMessageProps) => {
+const Message = ({ message, error }: IMessageProps) => {
   const [isVisible, setIsVisible] = useState(false);
   useEffect(() => {
     if (!message) {
@@ -22,7 +23,13 @@ const Message = ({ message }: IMessageProps) => {
 
   if (!isVisible) return null;
   return (
-    <div className={styles.message}>
+    <div
+      className={
+        error
+          ? `${styles.message} ${styles.error}`
+          : `${styles.message} ${styles.success}`
+      }
+    >
       <p>{message}</p>
     </div>
   );

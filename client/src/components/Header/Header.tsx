@@ -35,7 +35,7 @@ const Header: React.FC = () => {
           {user ? (
             <>
               <li>
-                <Link to="/profile">
+                <Link to="/myprofile">
                   <FaUser /> Profile
                 </Link>
               </li>

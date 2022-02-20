@@ -13,7 +13,7 @@ export const postcreate = async (newPostObject) => {
 
     return newPost;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -38,7 +38,7 @@ export const getAllPostsByProfileId = async (id) => {
 
     return posts;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -63,7 +63,7 @@ export const getPostById = async (postId) => {
 
     return post;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -87,7 +87,7 @@ export const getPosts = async () => {
 
     return posts;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -100,6 +100,6 @@ export const postDelete = async (postId, profileId) => {
       .andWhere("profile_id = :profileId", { profileId })
       .execute();
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };

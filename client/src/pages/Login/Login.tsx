@@ -35,7 +35,7 @@ const Register = () => {
       setMessage("");
       navigate("/");
     }
-  }, [auth]);
+  }, [auth, navigate, dispatch]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((prevState) => ({
@@ -59,7 +59,7 @@ const Register = () => {
   };
   return (
     <>
-      {message && <Message message={message} />}
+      {message && <Message message={message} error={true} />}
       <div className={styles.container}>
         <Back />
         <section>

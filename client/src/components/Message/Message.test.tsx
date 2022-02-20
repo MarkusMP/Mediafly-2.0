@@ -3,13 +3,13 @@ import { render, screen, waitFor } from "../../tests/test-utils";
 
 test("if message prop is empty then component should be empty", () => {
   const message = "";
-  const { container } = render(<Message message={message} />);
+  const { container } = render(<Message message={message} error={true} />);
   expect(container.firstChild).toBeNull();
 });
 
 test("if message prop is not empty should render component", () => {
   const message = "test";
-  render(<Message message={message} />);
+  render(<Message message={message} error={true} />);
 
   const messageElement = screen.getByText(message);
 
@@ -18,7 +18,7 @@ test("if message prop is not empty should render component", () => {
 
 test("message component shoud be empty after 3 seconds", () => {
   const message = "test";
-  const { unmount } = render(<Message message={message} />);
+  const { unmount } = render(<Message message={message} error={true} />);
 
   const messageElement = screen.getByText(message);
 

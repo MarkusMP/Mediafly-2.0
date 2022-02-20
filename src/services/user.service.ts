@@ -11,7 +11,7 @@ export const createUser = async (userObject) => {
         username: userObject.username,
         ...(userObject.firstName && { firstName: userObject.firstName }),
         ...(userObject.lastName && { lastName: userObject.lastName }),
-        ...(userObject.bio && { lastName: userObject.bio }),
+        ...(userObject.bio && { bio: userObject.bio }),
         ...(userObject.profile_image && {
           profile_image: userObject.profile_image,
         }),
@@ -29,7 +29,7 @@ export const createUser = async (userObject) => {
 
     return user;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -47,7 +47,7 @@ export const fetchUserByEmail = async (email: string) => {
 
     return user;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -60,7 +60,7 @@ export const getUserById = async (userId: string) => {
 
     return user;
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -73,7 +73,7 @@ export const userUpdate = async (updatedUser) => {
 
     return await User.findOneOrFail(updatedUser.id);
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
 
@@ -85,6 +85,6 @@ export const userDelete = async (profileId: string) => {
       .where("id = :id", { id: profileId })
       .execute();
   } catch (error: any) {
-    throw new Error(error);
+    return;
   }
 };
