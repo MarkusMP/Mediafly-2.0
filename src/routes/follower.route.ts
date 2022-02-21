@@ -4,6 +4,7 @@ import {
   userUnFollowSchema,
   fetchFollowersByProfileIdSchema,
   fetchFollowingByProfileIdSchema,
+  userIsFollowingSchema,
 } from "../schemas/follower.schema";
 import { protect } from "../middleware/authMiddleware";
 import validate from "../middleware/validateRequest";
@@ -12,6 +13,7 @@ import {
   userUnFollow,
   fetchFollowersByProfileId,
   fetchFollowingProfileId,
+  getIsUserFollowing,
 } from "../controllers/follower.controller";
 
 const router = express.Router();
@@ -28,6 +30,12 @@ router
     "/following/:profileId",
     validate(fetchFollowingByProfileIdSchema),
     fetchFollowingProfileId
+  )
+  .get(
+    "/:profileId",
+    protect,
+    validate(userIsFollowingSchema),
+    getIsUserFollowing
   );
 
 export default router;

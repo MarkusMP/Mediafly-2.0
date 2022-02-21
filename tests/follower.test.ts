@@ -63,7 +63,7 @@ test("Should fetch followers by userId", async () => {
   expect(followers).toHaveProperty("body");
 
   expect(followers.body).toHaveLength(1);
-  expect(followers.body[0].profile_id).toBe(loginOne.body.profile_id);
+  expect(followers.body[0].followers.id).toBe(loginOne.body.profile_id);
 });
 
 test("Should fetch following by userId", async () => {
@@ -78,7 +78,28 @@ test("Should fetch following by userId", async () => {
     `/api/follower/following/${loginOne.body.profile_id}`
   );
 
-  expect(following.body[0].profile_id).toBe(loginTwo.body.profile_id);
+  expect(following.body[0].following.id).toBe(loginTwo.body.profile_id);
+});
+
+test("Should fetch user is following", async () => {
+  const loginTwo = await request(server)
+    .post("/api/user/login")
+    .send({ email: testUserTwo.email, password: testUserTwo.password });
+  const loginOne = await request(server)
+    .post("/api/user/login")
+    .send({ email: testUserOne.email, password: testUserOne.password });
+
+  const follow = await request(server)
+    .post(`/api/follower/${loginOne.body.profile_id}`)
+    .set("Authorization", `Bearer ${loginTwo.body.token}`);
+
+  expect(follow.status).toBe(200);
+
+  const following = await request(server)
+    .get(`/api/follower/${loginOne.body.profile_id}`)
+    .set("Authorization", `Bearer ${loginTwo.body.token}`);
+
+  expect(following.body.message).toBe("User is following");
 });
 
 test("Should unfollow user", async () => {

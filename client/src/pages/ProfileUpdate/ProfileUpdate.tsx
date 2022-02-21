@@ -41,6 +41,9 @@ const ProfileUpdate = () => {
         bio: profile.bio,
       });
     }
+    if (!auth.user && !profile) {
+      navigate("/login");
+    }
     if (isSuccess && !isError && !message && !isLoading) {
       navigate("/myprofile");
     }

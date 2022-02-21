@@ -1,0 +1,76 @@
+@use "../../styles/colors";
+@use "../../styles/buttons";
+@use "../../styles/breakpoints";
+
+.link {
+  color: colors.$primary;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+
+  .card {
+    background-color: colors.$fourth;
+    padding: 20px;
+
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+
+    z-index: 1;
+
+    &:hover {
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+      max-width: 350px;
+      padding-bottom: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .bold {
+        font-weight: bold;
+      }
+
+      img {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        border: 10px solid darken(colors.$fourth, 3%);
+        object-fit: cover;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      h3 {
+        color: lighten(colors.$fifth, 30%);
+      }
+
+      .date {
+        padding-top: 20px;
+      }
+
+      .bio {
+        font-size: 16px;
+        margin-top: 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: breakpoints.$tablet) {
+  .link {
+    margin: 0 auto;
+    .card {
+      margin: 0;
+      margin-top: 10px;
+
+      max-width: 250px;
+    }
+  }
+}

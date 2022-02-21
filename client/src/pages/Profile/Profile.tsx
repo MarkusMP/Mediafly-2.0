@@ -17,23 +17,21 @@ type ProfileParams = {
 const Profile: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
-  const { profile, isError, isLoading, message } = useAppSelector(
+  const { isFollowing } = useAppSelector((state) => state.follower);
+  const { profile, isError, message } = useAppSelector(
     (state) => state.profile
   );
   const { username } = useParams<ProfileParams>();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
     if (!username && user) {
       dispatch(profileById(user.profile_id));
     }
     if (username) {
       dispatch(profileByusername(username));
     }
-  }, [user, dispatch, username, navigate]);
+  }, [user, dispatch, username, navigate, isFollowing]);
   return (
     <>
       {message && isError && <Message message={message} error={true} />}
@@ -41,7 +39,6 @@ const Profile: React.FC = () => {
         <div className={styles.container}>
           <Back />
         </div>
-        {isLoading && <div>Loading...</div>}
         {profile && <ProfileItem profile={profile} />}
       </div>
     </>

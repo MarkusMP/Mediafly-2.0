@@ -1,34 +1,41 @@
 import { Follower } from "../entities/follower.entity";
 import { createQueryBuilder, getRepository } from "typeorm";
-import { User } from "../entities/user.entity";
 
 export const followUser = async (followerId, followingId) => {
   try {
-    const user = await User.findOne({ id: followerId });
-
-    const followUser = await createQueryBuilder("follower")
-      .insert()
-      .into(Follower)
-      .values({
-        follower_id: user!.profile_id,
+    // Check if user is already following
+    const follower = await getRepository(Follower).findOne({
+      where: {
+        follower_id: followerId,
         following_id: followingId,
-      })
-      .execute();
+      },
+    });
+    if (!follower) {
+      const followUser = await createQueryBuilder("follower")
+        .insert()
+        .into(Follower)
+        .values({
+          follower_id: followerId,
+          following_id: followingId,
+        })
+        .returning("*")
+        .execute();
 
-    return followUser;
+      return followUser;
+    } else {
+      return;
+    }
   } catch (error: any) {
     return;
   }
 };
 
-export const unFollowUser = async (followerId, followingId) => {
+export const unFollowUser = async (followerId: string, followingId: string) => {
   try {
-    const user = await User.findOne({ id: followerId });
-
     const unfollowUser = await createQueryBuilder("follower")
       .delete()
       .from(Follower)
-      .where("follower_id = :followerId", { followerId: user!.profile_id })
+      .where("follower_id = :followerId", { followerId })
       .andWhere("following_id = :followingId", { followingId })
       .execute();
 
@@ -40,12 +47,10 @@ export const unFollowUser = async (followerId, followingId) => {
 
 export const getFollowersByProfileId = async (profileId) => {
   try {
-    const followers = await getRepository(Follower)
-      .createQueryBuilder("follower")
-      .where("follower.following_id = :profileId", { profileId })
-      .leftJoinAndSelect("follower.followers", "profile")
-      .select(["profile.id", "profile.username", "profile.profile_image"])
-      .getRawMany();
+    const followers = Follower.find({
+      where: { following_id: profileId },
+      relations: ["followers"],
+    });
     return followers;
   } catch (error: any) {
     return;
@@ -54,13 +59,33 @@ export const getFollowersByProfileId = async (profileId) => {
 
 export const getFollowingProfileById = async (profileId) => {
   try {
-    const followers = await getRepository(Follower)
-      .createQueryBuilder("follower")
-      .where("follower.follower_id = :profileId", { profileId })
-      .leftJoinAndSelect("follower.following", "profile")
-      .select(["profile.id", "profile.username", "profile.profile_image"])
-      .getRawMany();
+    const followers = Follower.find({
+      where: {
+        follower_id: profileId,
+      },
+      relations: ["following"],
+    });
     return followers;
+  } catch (error: any) {
+    return;
+  }
+};
+
+export const isUserFollowing = async (
+  followerId: string,
+  followingId: string
+) => {
+  try {
+    const following = await createQueryBuilder("follower")
+      .select("follower.id")
+      .from(Follower, "follower")
+      .where("follower.follower_id = :followerId", {
+        followerId: followerId,
+      })
+      .andWhere("follower.following_id = :followingId", { followingId })
+      .getRawOne();
+
+    return following;
   } catch (error: any) {
     return;
   }

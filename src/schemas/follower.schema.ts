@@ -21,3 +21,7 @@ export const fetchFollowersByProfileIdSchema = object({
 export const fetchFollowingByProfileIdSchema = object({
   ...params,
 });
+
+export const userIsFollowingSchema = object({
+  ...params,
+});

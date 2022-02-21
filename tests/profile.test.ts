@@ -52,8 +52,8 @@ test("Should fetch profile by id with Count of followers & following", async () 
     `/api/profile/${createTwo.body.profile_id}`
   );
 
-  expect(profile.body.followersCount).toBe(0);
-  expect(profile.body.followingCount).toBe(1);
+  expect(profile.body.followersCount).toBe(1);
+  expect(profile.body.followingCount).toBe(0);
 });
 
 test("Should fetch profile by username with count of followers & following", async () => {

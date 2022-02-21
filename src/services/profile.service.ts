@@ -8,8 +8,8 @@ export const getProfileById = async (profileId) => {
       .where("id = :id", {
         id: profileId,
       })
-      .loadRelationCountAndMap("profile.followersCount", "profile.followers")
-      .loadRelationCountAndMap("profile.followingCount", "profile.following")
+      .loadRelationCountAndMap("profile.followersCount", "profile.following")
+      .loadRelationCountAndMap("profile.followingCount", "profile.followers")
       .getOne();
 
     return profile;
@@ -25,8 +25,8 @@ export const getProfileByUsername = async (username) => {
       .where("username = :username", {
         username,
       })
-      .loadRelationCountAndMap("profile.followersCount", "profile.followers")
-      .loadRelationCountAndMap("profile.followingCount", "profile.following")
+      .loadRelationCountAndMap("profile.followersCount", "profile.following")
+      .loadRelationCountAndMap("profile.followingCount", "profile.followers")
       .getOne();
 
     return profile;

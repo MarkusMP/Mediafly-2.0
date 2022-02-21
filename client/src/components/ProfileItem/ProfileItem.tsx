@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 import styles from "./ProfileItem.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { deleteProfile } from "../../features/profile/profileSlice";
 import { logout } from "../../features/auth/authSlice";
+import {
+  isFollowing,
+  follow,
+  unFollow,
+} from "../../features/follower/followerSlice";
 import Modal from "../Modal/Modal";
 
 interface IProfile {
@@ -28,6 +33,9 @@ const ProfileItem = (props: IProfileItemProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
+  const { message, isFollowing: isFollowingMessage } = useAppSelector(
+    (state) => state.follower
+  );
   const {
     bio,
     created_at,
@@ -40,6 +48,12 @@ const ProfileItem = (props: IProfileItemProps) => {
     username,
   } = props.profile;
 
+  useEffect(() => {
+    if (user) {
+      dispatch(isFollowing({ profileId: id, token: user.token }));
+    }
+  }, [dispatch, id, user, message]);
+
   const handleDelete = () => {
     if (user?.profile_id === id) {
       dispatch(deleteProfile(user.token));
@@ -50,6 +64,22 @@ const ProfileItem = (props: IProfileItemProps) => {
 
   const handleClose = () => {
     setIsOpen(false);
+  };
+
+  const handleFollow = () => {
+    if (user) {
+      dispatch(follow({ profileId: id, token: user.token }));
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleUnfollow = () => {
+    if (user) {
+      dispatch(unFollow({ profileId: id, token: user.token }));
+    } else {
+      navigate("/login");
+    }
   };
 
   const date = new Date(created_at);
@@ -87,8 +117,8 @@ const ProfileItem = (props: IProfileItemProps) => {
                 }
               >
                 <p>
-                  <span className={styles.bold}>Followers:</span>{" "}
-                  {followersCount}
+                  <span className={styles.bold}>Followers:</span>
+                  <span> {followersCount}</span>
                 </p>
               </Link>
               <Link
@@ -99,15 +129,14 @@ const ProfileItem = (props: IProfileItemProps) => {
                 }
               >
                 <p>
-                  <span className={styles.bold}>Following:</span>{" "}
-                  {followingCount}
+                  <span className={styles.bold}>Following:</span>
+                  <span> {followingCount}</span>
                 </p>
               </Link>
             </div>
           </div>
           <div className={styles.btns}>
-            <button className={styles.btn}>Follow</button>
-            {user && user.profile_id === id && (
+            {user?.profile_id === id ? (
               <>
                 <button
                   className={styles.btn}
@@ -122,6 +151,15 @@ const ProfileItem = (props: IProfileItemProps) => {
                   Delete
                 </button>
               </>
+            ) : message === "Successfully followed user" ||
+              isFollowingMessage === "User is following" ? (
+              <button className={styles.btn} onClick={handleUnfollow}>
+                Unfollow
+              </button>
+            ) : (
+              <button className={styles.btn} onClick={handleFollow}>
+                Follow
+              </button>
             )}
           </div>
         </div>
