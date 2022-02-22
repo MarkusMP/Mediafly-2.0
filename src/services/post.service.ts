@@ -10,8 +10,29 @@ export const postcreate = async (newPostObject) => {
     });
 
     await newPost.save();
+    if (newPost) {
+      const posts = await getRepository(Post)
+        .createQueryBuilder("post")
+        .where("post.id = :id", { id: newPost.id })
+        .leftJoinAndSelect("post.profile", "profile")
+        .loadRelationCountAndMap("post.likesCount", "post.likes")
+        .select([
+          "post.text",
+          "post.image",
+          "post.id",
+          "profile_id",
+          "profile.username",
+          "profile.profile_image",
+          "profile.id",
+          "profile.firstName",
+          "profile.lastName",
+          "post.created_at",
+        ])
+        .getOne();
 
-    return newPost;
+      return posts;
+    }
+    return;
   } catch (error: any) {
     return;
   }
@@ -32,6 +53,8 @@ export const getAllPostsByProfileId = async (id) => {
         "profile.username",
         "profile.profile_image",
         "profile.id",
+        "profile.firstName",
+        "profile.lastName",
         "post.created_at",
       ])
       .getMany();
@@ -57,6 +80,8 @@ export const getPostById = async (postId) => {
         "profile.username",
         "profile.profile_image",
         "profile.id",
+        "profile.firstName",
+        "profile.lastName",
         "post.created_at",
       ])
       .getOne();
@@ -81,6 +106,8 @@ export const getPosts = async () => {
         "profile.username",
         "profile.profile_image",
         "profile.id",
+        "profile.firstName",
+        "profile.lastName",
         "post.created_at",
       ])
       .getMany();

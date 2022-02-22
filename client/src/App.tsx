@@ -7,6 +7,7 @@ import Profile from "./pages/Profile/Profile";
 import Following from "./pages/Following/Following";
 import ProfileUpdate from "./pages/ProfileUpdate/ProfileUpdate";
 import Follower from "./pages/Followers/Followers";
+import Home from "./pages/Home/Home";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route path="/" element={<h1>Home</h1>} />
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/myprofile/" element={<Profile />} />
@@ -22,9 +23,9 @@ function App() {
           <Route path="/profile/:username" element={<Profile />} />
           <Route path="/profile/:username/update" element={<ProfileUpdate />} />
           <Route path="/profile/:username/followers" element={<Follower />} />
-          <Route path="/profile/followers/" element={<Follower />} />
+          <Route path="/myprofile/followers/" element={<Follower />} />
           <Route path="/profile/:username/following" element={<Following />} />
-          <Route path="/profile/following/" element={<Following />} />
+          <Route path="/myprofile/following/" element={<Following />} />
         </Routes>
       </Router>
     </>

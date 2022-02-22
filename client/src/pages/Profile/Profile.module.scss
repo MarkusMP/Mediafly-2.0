@@ -1,1 +1,25 @@
 @use "../../styles/global";
+@use "../../styles/breakpoints";
+
+.profile {
+  display: flex;
+  justify-content: space-between;
+  h2 {
+    text-align: left;
+  }
+
+  .create {
+    margin: 20px 20px;
+  }
+}
+
+@media (max-width: breakpoints.$tablet) {
+  .profile {
+    flex-direction: column;
+    align-items: center;
+    h2 {
+      padding-top: 10px;
+      text-align: center;
+    }
+  }
+}

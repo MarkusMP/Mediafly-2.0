@@ -32,13 +32,23 @@ const Header: React.FC = () => {
               : `${styles.close} ${styles.links}`
           }
         >
+          <li>
+            <Link to="/">Home</Link>
+          </li>
           {user ? (
             <>
+              <li>
+                <Link to="/myprofile/following">Following</Link>
+              </li>
+              <li>
+                <Link to="/myprofile/followers">Followers</Link>
+              </li>
               <li>
                 <Link to="/myprofile">
                   <FaUser /> Profile
                 </Link>
               </li>
+
               <li>
                 <button className={styles.btn} onClick={handleLogout}>
                   <FaSignOutAlt /> Logout

@@ -1,0 +1,62 @@
+@use "../../styles/colors";
+@use "../../styles/buttons";
+@use "../../styles/breakpoints";
+
+.post {
+  padding: 10px;
+  max-width: 450px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  .profile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .btnError {
+      padding: 10px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 5px solid darken(colors.$fourth, 3%);
+        object-fit: cover;
+      }
+      .info {
+        padding-left: 10px;
+
+        h1 {
+          font-size: 18px;
+          color: colors.$primary;
+        }
+
+        h2 {
+          font-size: 16px;
+          color: colors.$secondary;
+          text-align: left;
+        }
+      }
+    }
+  }
+
+  .postContent {
+    padding: 10px;
+    text-align: left;
+
+    .img img {
+      border-radius: 5px;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+  }
+}

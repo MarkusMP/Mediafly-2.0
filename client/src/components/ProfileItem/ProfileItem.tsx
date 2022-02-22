@@ -82,6 +82,11 @@ const ProfileItem = (props: IProfileItemProps) => {
     }
   };
 
+  const addDefaultSrc = (ev: any) => [
+    (ev.target.src =
+      "https://t4.ftcdn.net/jpg/00/64/67/63/360_F_64676383_LdbmhiNM6Ypzb3FM4PPuFP9rHe7ri8Ju.jpg"),
+  ];
+
   const date = new Date(created_at);
   return (
     <>
@@ -94,7 +99,7 @@ const ProfileItem = (props: IProfileItemProps) => {
       )}
       <div className={styles.card}>
         <div className={styles.container}>
-          <img src={profile_image} alt="profile-img" />
+          <img src={profile_image} alt="profile-img" onError={addDefaultSrc} />
 
           <h1>
             {firstName} {lastName}
@@ -112,7 +117,7 @@ const ProfileItem = (props: IProfileItemProps) => {
               <Link
                 to={
                   id === user?.profile_id
-                    ? "/profile/followers"
+                    ? "/myprofile/followers"
                     : `/profile/${username}/followers`
                 }
               >
@@ -124,7 +129,7 @@ const ProfileItem = (props: IProfileItemProps) => {
               <Link
                 to={
                   id === user?.profile_id
-                    ? "/profile/following"
+                    ? "/myprofile/following"
                     : `/profile/${username}/following`
                 }
               >

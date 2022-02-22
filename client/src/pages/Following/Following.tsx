@@ -34,7 +34,7 @@ const Followers = () => {
     <div>
       <div className={styles.container}>
         <Back />
-        {follwing.length === 0 && <h1>No following users found.</h1>}
+        {follwing.length === 0 && <h1>This user isn't following anyone...</h1>}
         <div className={styles.list}>
           {follwing &&
             follwing.map((profile) => (

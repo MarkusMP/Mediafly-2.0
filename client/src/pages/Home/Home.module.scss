@@ -1,0 +1,23 @@
+@use "../../styles/global";
+@use "../../styles/breakpoints";
+
+.container {
+  margin-top: 20px;
+  display: flex;
+
+  .profile {
+    position: absolute;
+  }
+
+  .posts {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: breakpoints.$desktop) {
+  .container {
+    .profile {
+      display: none;
+    }
+  }
+}
