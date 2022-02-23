@@ -13,6 +13,10 @@
   }
 }
 
+.posts {
+  width: 350px;
+}
+
 @media (max-width: breakpoints.$tablet) {
   .profile {
     flex-direction: column;
@@ -21,5 +25,9 @@
       padding-top: 10px;
       text-align: center;
     }
+  }
+
+  .posts {
+    max-width: 100%;
   }
 }

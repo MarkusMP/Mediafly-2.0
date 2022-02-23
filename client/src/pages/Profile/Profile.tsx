@@ -50,13 +50,7 @@ const Profile: React.FC = () => {
           <Back />
         </div>
 
-        <div
-          className={
-            profile?.id === user?.profile_id
-              ? `${styles.profile} ${styles.container}`
-              : ""
-          }
-        >
+        <div className={`${styles.profile} ${styles.container}`}>
           <div>{profile && <ProfileItem profile={profile} />}</div>
           {profile && profile.id === user?.profile_id && (
             <div className={styles.create}>

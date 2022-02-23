@@ -1,0 +1,26 @@
+@use "../../styles/buttons";
+@use "../../styles/form";
+@use "../../styles/global";
+@use "../../styles/colors";
+
+.comment {
+  border-top: 1px solid colors.$third;
+
+  form {
+    .formGroup {
+      padding: 0px;
+      padding-top: 10px;
+
+      textarea {
+        resize: none;
+        height: 50px;
+        margin: 0;
+        padding-bottom: 0px;
+      }
+    }
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

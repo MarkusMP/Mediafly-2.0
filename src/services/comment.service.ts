@@ -3,7 +3,7 @@ import { Comment } from "../entities/comment.entity";
 
 export const commentCreate = async (postId, text, profileId) => {
   try {
-    const comment = await createQueryBuilder("comment")
+    const newComment = await createQueryBuilder("comment")
       .insert()
       .into(Comment)
       .values({
@@ -11,10 +11,29 @@ export const commentCreate = async (postId, text, profileId) => {
         profile_id: profileId,
         post_id: postId,
       })
-      .returning("*")
+      .returning("id")
       .execute();
 
-    return comment.raw[0];
+    const comment = await getRepository(Comment)
+      .createQueryBuilder("comment")
+      .where("comment.id = :id", { id: newComment.raw[0].id })
+      .leftJoinAndSelect("comment.profile", "profile")
+      .loadRelationCountAndMap("comment.likesCount", "comment.likes")
+      .select([
+        "comment.text",
+        "comment.post_id",
+        "comment.id",
+        "profile_id",
+        "profile.username",
+        "profile.profile_image",
+        "profile.id",
+        "profile.firstName",
+        "profile.lastName",
+        "comment.created_at",
+      ])
+      .getOne();
+
+    return comment;
   } catch (error: any) {
     return;
   }
@@ -24,9 +43,21 @@ export const getAllCommentsByPostId = async (postId) => {
   try {
     const comments = await getRepository(Comment)
       .createQueryBuilder("comment")
-      .where("comment.post_id = :postId", { postId })
+      .where("comment.post_id = :id", { id: postId })
+      .leftJoinAndSelect("comment.profile", "profile")
       .loadRelationCountAndMap("comment.likesCount", "comment.likes")
-      .orderBy("created_at", "DESC")
+      .select([
+        "comment.text",
+        "comment.post_id",
+        "comment.id",
+        "profile_id",
+        "profile.username",
+        "profile.profile_image",
+        "profile.id",
+        "profile.firstName",
+        "profile.lastName",
+        "comment.created_at",
+      ])
       .getMany();
 
     return comments;

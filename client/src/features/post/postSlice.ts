@@ -26,6 +26,7 @@ interface IPost {
   id: string;
   created_at: string;
   likesCount: number;
+  commentsCount: number;
   profile: IPostProfile;
 }
 
@@ -110,6 +111,26 @@ const postSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.message = "";
+    },
+    deleteCommentSuccess: (
+      state: IPostState,
+      action: PayloadAction<string>
+    ) => {
+      state.posts = state.posts.map((post) =>
+        post.id === action.payload
+          ? { ...post, commentsCount: post.commentsCount - 1 }
+          : post
+      );
+    },
+    createCommentSuccess: (
+      state: IPostState,
+      action: PayloadAction<string>
+    ) => {
+      state.posts = state.posts.map((post) =>
+        post.id === action.payload
+          ? { ...post, commentsCount: post.commentsCount + 1 }
+          : post
+      );
     },
   },
   extraReducers: (builder) => {
@@ -214,6 +235,7 @@ const postSlice = createSlice({
   },
 });
 
-export const { reset } = postSlice.actions;
+export const { reset, deleteCommentSuccess, createCommentSuccess } =
+  postSlice.actions;
 
 export default postSlice.reducer;

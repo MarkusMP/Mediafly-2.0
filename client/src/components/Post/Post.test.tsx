@@ -6,6 +6,7 @@ const postProps = {
   text: "this is text",
   image: "image.jpg",
   likesCount: 1,
+  commentsCount: 1,
   profile: {
     id: "id2",
     firstName: "testFirstName",

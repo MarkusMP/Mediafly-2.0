@@ -2,12 +2,13 @@
 @use "../../styles/buttons";
 @use "../../styles/breakpoints";
 
-.post {
-  padding: 10px;
+.comment {
   max-width: 450px;
   border-radius: 5px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
+  padding: 10px 0;
+  border-top: 1px solid colors.$third;
+  border-bottom: 1px solid colors.$third;
   .profile {
     display: flex;
     align-items: center;
@@ -31,6 +32,7 @@
         border: 5px solid darken(colors.$fourth, 3%);
         object-fit: cover;
       }
+
       .info {
         padding-left: 10px;
 
@@ -48,16 +50,9 @@
     }
   }
 
-  .postContent {
+  .commentContent {
     padding: 10px;
     text-align: left;
-
-    .img img {
-      border-radius: 5px;
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
   }
 
   .bot {

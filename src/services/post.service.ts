@@ -16,6 +16,7 @@ export const postcreate = async (newPostObject) => {
         .where("post.id = :id", { id: newPost.id })
         .leftJoinAndSelect("post.profile", "profile")
         .loadRelationCountAndMap("post.likesCount", "post.likes")
+        .loadRelationCountAndMap("post.commentsCount", "post.comments")
         .select([
           "post.text",
           "post.image",
@@ -45,6 +46,7 @@ export const getAllPostsByProfileId = async (id) => {
       .where("post.profile_id = :id", { id })
       .leftJoinAndSelect("post.profile", "profile")
       .loadRelationCountAndMap("post.likesCount", "post.likes")
+      .loadRelationCountAndMap("post.commentsCount", "post.comments")
       .select([
         "post.text",
         "post.image",
@@ -72,6 +74,7 @@ export const getPostById = async (postId) => {
       .where("post.id = :id", { id: postId })
       .leftJoinAndSelect("post.profile", "profile")
       .loadRelationCountAndMap("post.likesCount", "post.likes")
+      .loadRelationCountAndMap("post.commentsCount", "post.comments")
       .select([
         "post.text",
         "post.image",
@@ -98,6 +101,7 @@ export const getPosts = async () => {
       .createQueryBuilder("post")
       .leftJoinAndSelect("post.profile", "profile")
       .loadRelationCountAndMap("post.likesCount", "post.likes")
+      .loadRelationCountAndMap("post.commentsCount", "post.comments")
       .select([
         "post.text",
         "post.image",

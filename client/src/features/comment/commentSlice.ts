@@ -1,0 +1,164 @@
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import commentService from "./commentService";
+
+export interface ICreateComment {
+  postId: string;
+  text: string;
+  token: string;
+}
+
+export interface IDeleteComment {
+  token: string;
+  commentId: string;
+}
+
+interface IDeleteCommentPayload {
+  message: string;
+  commentId: string;
+}
+
+interface ICommentState {
+  message: string;
+  isLoading: boolean;
+  isError: boolean;
+  isSuccess: boolean;
+  comments: IComment[];
+}
+
+interface IComment {
+  id: string;
+  post_id: string;
+  text: string;
+  created_at: string;
+  likesCount: number;
+  profile: {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    profile_image: string;
+  };
+}
+
+const initialState: ICommentState = {
+  message: "",
+  isLoading: false,
+  isError: false,
+  isSuccess: false,
+  comments: [],
+};
+
+export const createComment = createAsyncThunk(
+  "comment/createComment",
+  async (data: ICreateComment, thunkAPI) => {
+    try {
+      return await commentService.createComment({
+        postId: data.postId,
+        text: data.text,
+        token: data.token,
+      });
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const fetchCommentsByPostId = createAsyncThunk(
+  "comment/fetchCommentsByPostId",
+  async (postId: string, thunkAPI) => {
+    try {
+      return await commentService.fetchCommentsByPostId(postId);
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const deleteComment = createAsyncThunk(
+  "comment/deleteComment",
+  async (data: IDeleteComment, thunkAPI) => {
+    try {
+      return await commentService.deleteComment(data);
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+const commentSlice = createSlice({
+  name: "comment",
+  initialState,
+  reducers: {
+    reset: (state, action: PayloadAction<string>) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.message = "";
+      state.comments = state.comments.filter(
+        (comment) => comment.post_id !== action.payload
+      );
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createComment.pending, (state: ICommentState) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        createComment.fulfilled,
+        (state, action: PayloadAction<IComment>) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.comments = [...state.comments, action.payload];
+        }
+      )
+      .addCase(createComment.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = payload;
+      })
+      .addCase(fetchCommentsByPostId.pending, (state: ICommentState) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        fetchCommentsByPostId.fulfilled,
+        (state, action: PayloadAction<IComment[]>) => {
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.comments = [...state.comments, ...action.payload];
+        }
+      )
+      .addCase(fetchCommentsByPostId.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = payload;
+      })
+      .addCase(deleteComment.pending, (state: ICommentState) => {
+        state.isLoading = true;
+      })
+      .addCase(
+        deleteComment.fulfilled,
+        (state, action: PayloadAction<IDeleteCommentPayload>) => {
+          console.log(action.payload);
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.comments = state.comments.filter(
+            (comment) => comment.id !== action.payload.commentId
+          );
+          state.message = action.payload.message;
+        }
+      )
+      .addCase(deleteComment.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = payload;
+      });
+  },
+});
+
+export const { reset } = commentSlice.actions;
+
+export default commentSlice.reducer;

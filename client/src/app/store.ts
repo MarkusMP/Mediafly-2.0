@@ -3,12 +3,14 @@ import authReducer from "../features/auth/authSlice";
 import profileReducer from "../features/profile/profileSlice";
 import followerReducer from "../features/follower/followerSlice";
 import postReducer from "../features/post/postSlice";
+import commentReducer from "../features/comment/commentSlice";
 
 export const rootReducer = {
   auth: authReducer,
   profile: profileReducer,
   follower: followerReducer,
   post: postReducer,
+  comment: commentReducer,
 };
 
 export const store = configureStore({
@@ -17,6 +19,7 @@ export const store = configureStore({
     profile: profileReducer,
     follower: followerReducer,
     post: postReducer,
+    comment: commentReducer,
   },
 });
 
