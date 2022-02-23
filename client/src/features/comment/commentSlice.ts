@@ -112,6 +112,7 @@ const commentSlice = createSlice({
         (state, action: PayloadAction<IComment>) => {
           state.isLoading = false;
           state.isSuccess = true;
+          state.message = "";
           state.comments = [...state.comments, action.payload];
         }
       )
@@ -122,12 +123,14 @@ const commentSlice = createSlice({
       })
       .addCase(fetchCommentsByPostId.pending, (state: ICommentState) => {
         state.isLoading = true;
+        state.message = "";
       })
       .addCase(
         fetchCommentsByPostId.fulfilled,
         (state, action: PayloadAction<IComment[]>) => {
           state.isLoading = false;
           state.isSuccess = true;
+          state.message = "";
           state.comments = [...state.comments, ...action.payload];
         }
       )

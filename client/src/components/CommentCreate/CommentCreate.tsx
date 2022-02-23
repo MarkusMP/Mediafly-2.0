@@ -3,6 +3,7 @@ import styles from "../CommentCreate/CommentCreate.module.scss";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { createComment } from "../../features/comment/commentSlice";
 import { createCommentSuccess } from "../../features/post/postSlice";
+import Message from "../Message/Message";
 
 interface CommentCreateProps {
   postId: string;
@@ -12,6 +13,7 @@ const CommentCreate = ({ postId }: CommentCreateProps) => {
   const [text, setText] = useState("");
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
+  const { message } = useAppSelector((state) => state.comment);
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,26 +24,31 @@ const CommentCreate = ({ postId }: CommentCreateProps) => {
   };
 
   return (
-    <div className={styles.comment}>
-      <form onSubmit={onSubmit}>
-        <div className={styles.formGroup}>
-          <textarea
-            id="text"
-            name="text"
-            value={text}
-            placeholder="Comment Something..."
-            onChange={(e) => setText(e.target.value)}
-            required
-          />
-        </div>
+    <>
+      {message === "Something went wrong creating a comment" && (
+        <Message message={message} error={true} />
+      )}
+      <div className={styles.comment}>
+        <form onSubmit={onSubmit}>
+          <div className={styles.formGroup}>
+            <textarea
+              id="text"
+              name="text"
+              value={text}
+              placeholder="Comment Something..."
+              onChange={(e) => setText(e.target.value)}
+              required
+            />
+          </div>
 
-        <div>
-          <button type="submit" className={styles.btn}>
-            Create Comment
-          </button>
-        </div>
-      </form>
-    </div>
+          <div>
+            <button type="submit" className={styles.btn}>
+              Create Comment
+            </button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 

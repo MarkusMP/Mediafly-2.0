@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { BsHeart } from "react-icons/bs";
 import { deleteComment } from "../../features/comment/commentSlice";
 import { deleteCommentSuccess } from "../../features/post/postSlice";
+import Message from "../Message/Message";
 
 interface CommentProps {
   comment: {
@@ -25,6 +26,7 @@ interface CommentProps {
 
 const Comment = ({ comment }: CommentProps) => {
   const { user } = useAppSelector((state) => state.auth);
+  const { message } = useAppSelector((state) => state.comment);
   const dispatch = useAppDispatch();
   const { text, profile, likesCount, post_id } = comment;
 
@@ -42,6 +44,12 @@ const Comment = ({ comment }: CommentProps) => {
 
   return (
     <>
+      {message === "Something went wrong deleting a comment" && (
+        <Message message={message} error={true} />
+      )}
+      {message === "Comment deleted successfully" && (
+        <Message message={message} error={false} />
+      )}
       <div className={styles.comment}>
         <div className={styles.profile}>
           <Link to={`/profile/${profile.username}`}>
