@@ -12,6 +12,15 @@ export interface IPostDelete {
   token: string;
 }
 
+export interface IPostLike {
+  postId: string;
+  token: string;
+}
+export interface IPostUnLike {
+  postId: string;
+  token: string;
+}
+
 interface IPostProfile {
   id: string;
   username: string;
@@ -37,6 +46,7 @@ interface IPostState {
   isLoading: boolean;
   isSuccess: boolean;
   message: string;
+  likeMessage: string;
 }
 
 const initialState: IPostState = {
@@ -46,6 +56,7 @@ const initialState: IPostState = {
   message: "",
   isError: false,
   isSuccess: false,
+  likeMessage: "",
 };
 
 interface IPostDeletePayload {
@@ -102,6 +113,30 @@ export const deletePost = createAsyncThunk(
   }
 );
 
+export const like = createAsyncThunk(
+  "post/like",
+  async (data: IPostLike, thunkAPI) => {
+    try {
+      return await postService.likePost(data);
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const unLike = createAsyncThunk(
+  "post/unlike",
+  async (data: IPostUnLike, thunkAPI) => {
+    try {
+      return await postService.unLikePost(data);
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState,
@@ -129,6 +164,20 @@ const postSlice = createSlice({
       state.posts = state.posts.map((post) =>
         post.id === action.payload
           ? { ...post, commentsCount: post.commentsCount + 1 }
+          : post
+      );
+    },
+    likeSuccess: (state: IPostState, action: PayloadAction<string>) => {
+      state.posts = state.posts.map((post) =>
+        post.id === action.payload
+          ? { ...post, likesCount: post.likesCount + 1 }
+          : post
+      );
+    },
+    unlikeSuccess: (state: IPostState, action: PayloadAction<string>) => {
+      state.posts = state.posts.map((post) =>
+        post.id === action.payload
+          ? { ...post, likesCount: post.likesCount - 1 }
           : post
       );
     },
@@ -231,11 +280,58 @@ const postSlice = createSlice({
           state.message = payload;
           state.isSuccess = false;
         }
-      );
+      )
+      .addCase(like.pending, (state: IPostState) => {
+        state.isLoading = true;
+        state.message = "";
+        state.isError = false;
+        state.isSuccess = false;
+        state.likeMessage = "";
+      })
+      .addCase(like.fulfilled, (state: IPostState, action: any) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = "";
+        state.likeMessage = action.payload.message;
+      })
+      .addCase(like.rejected, (state: IPostState, { payload }: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = "";
+        state.isSuccess = false;
+        state.likeMessage = payload.message;
+      })
+      .addCase(unLike.pending, (state: IPostState) => {
+        state.isLoading = true;
+        state.message = "";
+        state.isError = false;
+        state.isSuccess = false;
+        state.likeMessage = "";
+      })
+      .addCase(unLike.fulfilled, (state: IPostState, action: any) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        state.message = "";
+        state.likeMessage = action.payload.message;
+      })
+      .addCase(unLike.rejected, (state: IPostState, { payload }: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = "";
+        state.isSuccess = false;
+        state.likeMessage = payload.message;
+      });
   },
 });
 
-export const { reset, deleteCommentSuccess, createCommentSuccess } =
-  postSlice.actions;
+export const {
+  reset,
+  deleteCommentSuccess,
+  createCommentSuccess,
+  likeSuccess,
+  unlikeSuccess,
+} = postSlice.actions;
 
 export default postSlice.reducer;

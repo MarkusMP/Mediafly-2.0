@@ -2,7 +2,13 @@ import React, { useEffect } from "react";
 import styles from "./Post.module.scss";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { deletePost } from "../../features/post/postSlice";
+import {
+  deletePost,
+  like,
+  unLike,
+  likeSuccess,
+  unlikeSuccess,
+} from "../../features/post/postSlice";
 import {
   fetchCommentsByPostId,
   reset,
@@ -13,6 +19,8 @@ import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { FaRegComment } from "react-icons/fa";
 import CommentCreate from "../CommentCreate/CommentCreate";
 import Comment from "../Comment/Comment";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 interface PostProps {
   id: string;
@@ -35,11 +43,14 @@ interface Props {
 
 const Post = ({ post }: Props) => {
   const [showComment, setShowComment] = React.useState(false);
+  const [likedMessage, setLikedMessage] = React.useState("");
   const { user } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.post);
   const { comments } = useAppSelector((state) => state.comment);
   const dispatch = useAppDispatch();
   const { id, text, image, likesCount, profile, commentsCount } = post;
+
+  const navigate = useNavigate();
 
   const addDefaultSrc = (ev: any) => [
     (ev.target.src =
@@ -52,11 +63,46 @@ const Post = ({ post }: Props) => {
     } else {
       dispatch(reset(id));
     }
+
+    if (user) {
+      const isPostLiked = async () => {
+        const response = await axios.get(`/api/like/post/${id}/user`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        setLikedMessage(response.data.message);
+      };
+
+      isPostLiked();
+    }
   }, [id, showComment, dispatch]);
 
   const handlePostDelete = () => {
     if (user) {
       dispatch(deletePost({ postId: id, token: user.token }));
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleLike = () => {
+    if (user) {
+      dispatch(like({ postId: id, token: user.token }));
+      dispatch(likeSuccess(id));
+      setLikedMessage("Post is liked");
+    } else {
+      navigate("/login");
+    }
+  };
+  const handleUnlike = () => {
+    if (user) {
+      dispatch(unLike({ postId: id, token: user.token }));
+      dispatch(unlikeSuccess(id));
+      setLikedMessage("");
+    } else {
+      navigate("/login");
     }
   };
 
@@ -104,7 +150,12 @@ const Post = ({ post }: Props) => {
         <div className={styles.bot}>
           <div className={styles.likes}>
             <span>
-              {likesCount} <BsHeart />
+              {likesCount}{" "}
+              {likedMessage === "Post is liked" ? (
+                <BsHeartFill onClick={handleUnlike} />
+              ) : (
+                <BsHeart onClick={handleLike} />
+              )}
             </span>
           </div>
           <div
@@ -128,7 +179,7 @@ const Post = ({ post }: Props) => {
                 );
               })
               .map((comment) => (
-                <Comment comment={comment} />
+                <Comment comment={comment} key={comment.id} />
               ))}
           </div>
         )}

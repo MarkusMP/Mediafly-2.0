@@ -1,4 +1,4 @@
-import { IPostCreate, IPostDelete } from "./postSlice";
+import { IPostCreate, IPostDelete, IPostLike } from "./postSlice";
 import axios from "axios";
 
 const createPost = async (post: IPostCreate) => {
@@ -43,11 +43,37 @@ const getAllPostsByProfileId = async (profileId: string) => {
   return response.data;
 };
 
+const likePost = async (data: IPostLike) => {
+  const response = await axios.post(
+    `/api/like/post/${data.postId}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+const unLikePost = async (data: IPostLike) => {
+  const response = await axios.delete(`/api/like/post/${data.postId}`, {
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
+  });
+
+  return response.data;
+};
+
 const postService = {
   createPost,
   getAllPosts,
   deletePost,
   getAllPostsByProfileId,
+  likePost,
+  unLikePost,
 };
 
 export default postService;

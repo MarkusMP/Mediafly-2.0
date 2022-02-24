@@ -23,3 +23,14 @@ export const unlikeCommentSchema = object({
     commentId: string().required("Comment ID is required"),
   }),
 });
+export const isUnlikedCommentSchema = object({
+  params: object({
+    commentId: string().required("Comment ID is required"),
+  }),
+});
+
+export const isLikedPostSchema = object({
+  params: object({
+    postId: string().required("Post ID is required"),
+  }),
+});

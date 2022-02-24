@@ -5,6 +5,8 @@ import {
   unlikePost,
   commentLike,
   commentUnlike,
+  isPostLiked,
+  isCommentLiked,
 } from "../services/like.service";
 
 // @route   POST api/like/post/:postId
@@ -35,11 +37,11 @@ const postUnlike = async (req: IGetUserAuthInfoRequest, res: Response) => {
     await unlikePost(req.user!.profile_id, postId);
 
     return res.status(200).json({
-      message: "Successfully unfollowed user",
+      message: "Successfully unLike post",
     });
   } catch (error) {
     return res.status(404).json({
-      message: "Failed to unfollow user",
+      message: "Failed to unLike post",
     });
   }
 };
@@ -72,13 +74,85 @@ const unlikeComment = async (req: IGetUserAuthInfoRequest, res: Response) => {
   try {
     await commentUnlike(req.user!.profile_id, commentId);
     return res.status(200).json({
-      message: "Successfully unfollowed comment",
+      message: "Successfully unliked comment",
     });
   } catch (error) {
     return res.status(400).json({
-      message: "Failed to unfollow comment",
+      message: "Failed to unlike comment",
     });
   }
 };
 
-export { likePost, postUnlike, likeComment, unlikeComment };
+// @route   GET api/like/post/:postId/user
+// @desc    fetch is post liked by user
+// @access  Private
+const getIsPostLiked = async (req: IGetUserAuthInfoRequest, res: Response) => {
+  const { postId } = req.params;
+
+  if (!req.user?.profile_id) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  try {
+    const liked = await isPostLiked(req.user?.profile_id, postId);
+
+    if (liked) {
+      return res.status(200).json({
+        message: "Post is liked",
+      });
+    } else {
+      return res.status(200).json({
+        message: "Post is not liked",
+      });
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: "Failed to fetch liked post",
+    });
+  }
+};
+
+// @route   GET api/like/comment/:commentId/user
+// @desc    fetch is comment liked by user
+// @access  Private
+const getIsCommentLiked = async (
+  req: IGetUserAuthInfoRequest,
+  res: Response
+) => {
+  const { commentId } = req.params;
+
+  if (!req.user?.profile_id) {
+    return res.status(404).json({
+      message: "User not found",
+    });
+  }
+
+  try {
+    const liked = await isCommentLiked(req.user?.profile_id, commentId);
+
+    if (liked) {
+      return res.status(200).json({
+        message: "Comment is liked",
+      });
+    } else {
+      return res.status(200).json({
+        message: "Comment is not liked",
+      });
+    }
+  } catch (error) {
+    return res.status(404).json({
+      message: "Failed to fetch liked post",
+    });
+  }
+};
+
+export {
+  likePost,
+  postUnlike,
+  likeComment,
+  unlikeComment,
+  getIsPostLiked,
+  getIsCommentLiked,
+};

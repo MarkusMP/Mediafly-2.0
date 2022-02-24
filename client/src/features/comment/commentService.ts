@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ICreateComment, IDeleteComment } from "./commentSlice";
+import { ICreateComment, IDeleteComment, ILikeComment } from "./commentSlice";
 
 const createComment = async (data: ICreateComment) => {
   const response = await axios.post(`/api/comment/${data.postId}`, data, {
@@ -30,6 +30,36 @@ const deleteComment = async (data: IDeleteComment) => {
   return response.data;
 };
 
-const commentService = { createComment, fetchCommentsByPostId, deleteComment };
+const commentLike = async (data: ILikeComment) => {
+  const response = await axios.post(
+    `/api/like/comment/${data.commentId}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+const commentUnlike = async (data: ILikeComment) => {
+  const response = await axios.delete(`/api/like/comment/${data.commentId}`, {
+    headers: {
+      Authorization: `Bearer ${data.token}`,
+    },
+  });
+
+  return response.data;
+};
+
+const commentService = {
+  createComment,
+  fetchCommentsByPostId,
+  deleteComment,
+  commentLike,
+  commentUnlike,
+};
 
 export default commentService;

@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { createComment } from "../../features/comment/commentSlice";
 import { createCommentSuccess } from "../../features/post/postSlice";
 import Message from "../Message/Message";
+import { useNavigate } from "react-router-dom";
 
 interface CommentCreateProps {
   postId: string;
@@ -14,12 +15,15 @@ const CommentCreate = ({ postId }: CommentCreateProps) => {
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.comment);
+  const navigate = useNavigate();
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (user && text && postId) {
       dispatch(createComment({ text, postId, token: user.token }));
       dispatch(createCommentSuccess(postId));
+    } else {
+      navigate("/login");
     }
   };
 

@@ -1,11 +1,18 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Comment.module.scss";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { BsHeart } from "react-icons/bs";
-import { deleteComment } from "../../features/comment/commentSlice";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
+import {
+  deleteComment,
+  commentLike,
+  commentUnlike,
+  likeSuccess,
+  unlikeSuccess,
+} from "../../features/comment/commentSlice";
 import { deleteCommentSuccess } from "../../features/post/postSlice";
 import Message from "../Message/Message";
+import axios from "axios";
 
 interface CommentProps {
   comment: {
@@ -25,10 +32,30 @@ interface CommentProps {
 }
 
 const Comment = ({ comment }: CommentProps) => {
+  const [likedMessage, setLikedMessage] = useState("");
   const { user } = useAppSelector((state) => state.auth);
   const { message } = useAppSelector((state) => state.comment);
   const dispatch = useAppDispatch();
-  const { text, profile, likesCount, post_id } = comment;
+  const { text, profile, likesCount, post_id, id } = comment;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      const isCommentLiked = async () => {
+        const response = await axios.get(`/api/like/comment/${id}/user`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        });
+
+        console.log(response.data.message);
+
+        setLikedMessage(response.data.message);
+      };
+
+      isCommentLiked();
+    }
+  }, []);
 
   const addDefaultSrc = (ev: any) => [
     (ev.target.src =
@@ -39,6 +66,28 @@ const Comment = ({ comment }: CommentProps) => {
     if (user) {
       dispatch(deleteComment({ commentId: comment.id, token: user.token }));
       dispatch(deleteCommentSuccess(post_id));
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleCommentLike = () => {
+    if (user) {
+      dispatch(commentLike({ commentId: comment.id, token: user.token }));
+      dispatch(likeSuccess(comment.id));
+      setLikedMessage("Comment is liked");
+    } else {
+      navigate("/login");
+    }
+  };
+
+  const handleCommentUnlike = () => {
+    if (user) {
+      dispatch(commentUnlike({ commentId: comment.id, token: user.token }));
+      dispatch(unlikeSuccess(comment.id));
+      setLikedMessage("");
+    } else {
+      navigate("/login");
     }
   };
 
@@ -82,7 +131,12 @@ const Comment = ({ comment }: CommentProps) => {
         <div className={styles.bot}>
           <div className={styles.likes}>
             <span>
-              {likesCount} <BsHeart />
+              {likesCount}{" "}
+              {likedMessage === "Comment is liked" ? (
+                <BsHeartFill onClick={handleCommentUnlike} />
+              ) : (
+                <BsHeart onClick={handleCommentLike} />
+              )}
             </span>
           </div>
         </div>

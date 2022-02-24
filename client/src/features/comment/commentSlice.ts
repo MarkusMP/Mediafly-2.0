@@ -12,6 +12,15 @@ export interface IDeleteComment {
   commentId: string;
 }
 
+export interface ILikeComment {
+  commentId: string;
+  token: string;
+}
+export interface IUnlikeComment {
+  commentId: string;
+  token: string;
+}
+
 interface IDeleteCommentPayload {
   message: string;
   commentId: string;
@@ -22,6 +31,7 @@ interface ICommentState {
   isLoading: boolean;
   isError: boolean;
   isSuccess: boolean;
+  likeMessage: string;
   comments: IComment[];
 }
 
@@ -45,6 +55,7 @@ const initialState: ICommentState = {
   isLoading: false,
   isError: false,
   isSuccess: false,
+  likeMessage: "",
   comments: [],
 };
 
@@ -88,6 +99,30 @@ export const deleteComment = createAsyncThunk(
   }
 );
 
+export const commentLike = createAsyncThunk(
+  "comment/commentLike",
+  async (data: ILikeComment, thunkAPI) => {
+    try {
+      return await commentService.commentLike(data);
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const commentUnlike = createAsyncThunk(
+  "comment/commentUnlike",
+  async (data: IUnlikeComment, thunkAPI) => {
+    try {
+      return await commentService.commentUnlike(data);
+    } catch (error: any) {
+      const message = error.response.data.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 const commentSlice = createSlice({
   name: "comment",
   initialState,
@@ -100,6 +135,22 @@ const commentSlice = createSlice({
       state.comments = state.comments.filter(
         (comment) => comment.post_id !== action.payload
       );
+    },
+    likeSuccess: (state, action: PayloadAction<string>) => {
+      state.comments = state.comments.map((comment) => {
+        if (comment.id === action.payload) {
+          comment.likesCount += 1;
+        }
+        return comment;
+      });
+    },
+    unlikeSuccess: (state, action: PayloadAction<string>) => {
+      state.comments = state.comments.map((comment) => {
+        if (comment.id === action.payload) {
+          comment.likesCount -= 1;
+        }
+        return comment;
+      });
     },
   },
   extraReducers: (builder) => {
@@ -158,10 +209,38 @@ const commentSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = payload;
+      })
+      .addCase(commentLike.pending, (state: ICommentState) => {
+        state.isLoading = true;
+      })
+      .addCase(commentLike.fulfilled, (state, action: any) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.likeMessage = action.payload.message;
+      })
+      .addCase(commentLike.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.likeMessage = payload.message;
+      })
+      .addCase(commentUnlike.pending, (state: ICommentState) => {
+        state.isLoading = true;
+      })
+      .addCase(commentUnlike.fulfilled, (state, action: any) => {
+        console.log(action.payload);
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.likeMessage = action.payload.message;
+      })
+      .addCase(commentUnlike.rejected, (state, { payload }: any) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.likeMessage = payload.message;
       });
   },
 });
 
-export const { reset } = commentSlice.actions;
+export const { reset, likeSuccess, unlikeSuccess } = commentSlice.actions;
 
 export default commentSlice.reducer;

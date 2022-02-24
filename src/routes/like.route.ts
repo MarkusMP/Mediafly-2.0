@@ -6,12 +6,16 @@ import {
   postUnlike,
   likeComment,
   unlikeComment,
+  getIsPostLiked,
+  getIsCommentLiked,
 } from "../controllers/like.controller";
 import {
   likePostSchema,
   unLikePostSchema,
   likeCommentSchema,
   unlikeCommentSchema,
+  isLikedPostSchema,
+  isUnlikedCommentSchema,
 } from "../schemas/like.schema";
 
 const router = express.Router();
@@ -30,6 +34,18 @@ router
     protect,
     validate(unlikeCommentSchema),
     unlikeComment
+  )
+  .get(
+    "/post/:postId/user",
+    protect,
+    validate(isLikedPostSchema),
+    getIsPostLiked
+  )
+  .get(
+    "/comment/:commentId/user",
+    protect,
+    validate(isUnlikedCommentSchema),
+    getIsCommentLiked
   );
 
 export default router;
