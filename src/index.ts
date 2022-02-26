@@ -12,7 +12,7 @@ export const start = async () => {
         entities: ["dist/**/*.entity.js"],
         synchronize: true,
         extra: {
-          ssl: true,
+          ssl: { rejectUnauthorized: false },
         },
       });
 
