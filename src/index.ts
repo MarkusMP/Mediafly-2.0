@@ -6,7 +6,15 @@ export const start = async () => {
   let retries = 5;
   while (retries) {
     try {
-      await createConnection();
+      await createConnection({
+        url: process.env.DATABASE_URL,
+        type: "postgres",
+        entities: ["dist/**/*.entity.js"],
+        synchronize: true,
+        extra: {
+          ssl: true,
+        },
+      });
 
       console.log("Connected to Postgres");
       app.listen(port, () => {
