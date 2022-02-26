@@ -21,6 +21,8 @@ const Home = () => {
       dispatch(profileById(user.profile_id));
     }
   }, [dispatch, user]);
+
+  console.log(posts);
   return (
     <>
       {message && <Message message={message} error={true} />}
@@ -33,9 +35,7 @@ const Home = () => {
         <div className={styles.posts}>
           <PostCreate />
           <div className={styles.posts}>
-            {posts.map((post) => (
-              <Post key={post.id} post={post} />
-            ))}
+            {posts && posts.map((post) => <Post key={post.id} post={post} />)}
           </div>
         </div>
       </div>

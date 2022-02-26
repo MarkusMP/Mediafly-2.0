@@ -170,17 +170,18 @@ const Post = ({ post }: Props) => {
         {showComment && (
           <div>
             <CommentCreate postId={id} />
-            {comments
-              .filter((comment) => comment.post_id === id)
-              .sort((a, b) => {
-                return (
-                  new Date(b.created_at).getTime() -
-                  new Date(a.created_at).getTime()
-                );
-              })
-              .map((comment) => (
-                <Comment comment={comment} key={comment.id} />
-              ))}
+            {comments &&
+              comments
+                .filter((comment) => comment.post_id === id)
+                .sort((a, b) => {
+                  return (
+                    new Date(b.created_at).getTime() -
+                    new Date(a.created_at).getTime()
+                  );
+                })
+                .map((comment) => (
+                  <Comment comment={comment} key={comment.id} />
+                ))}
           </div>
         )}
       </div>

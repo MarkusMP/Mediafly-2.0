@@ -17,5 +17,16 @@ services:
       - 5432:5432
     volumes:
       - db-data:/var/lib/postgresql/data
+  client:
+    build:
+      context: ./client/
+    command: npm start
+    volumes:
+      - ./client/:/usr/app
+      - /usr/app/node_modules
+    depends_on:
+      - app
+    ports:
+      - "3000:3000"
 volumes:
   db-data:
