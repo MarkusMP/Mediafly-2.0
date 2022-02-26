@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "proxy": "http://sma_app_1:5000",
+  "proxy": "https://sma-sql.herokuapp.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
