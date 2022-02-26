@@ -3,7 +3,7 @@ import axios from "axios";
 
 const createPost = async (post: IPostCreate) => {
   const response = await axios.post(
-    "/api/post",
+    "https://sma-sql.herokuapp.com/api/post",
     {
       text: post.text,
       ...(post.image && { image: post.image }),
@@ -19,17 +19,20 @@ const createPost = async (post: IPostCreate) => {
 };
 
 const getAllPosts = async () => {
-  const response = await axios.get("/api/post");
+  const response = await axios.get("https://sma-sql.herokuapp.com/api/post");
 
   return response.data;
 };
 
 const deletePost = async (data: IPostDelete) => {
-  const response = await axios.delete(`/api/post/${data.postId}`, {
-    headers: {
-      Authorization: `Bearer ${data.token}`,
-    },
-  });
+  const response = await axios.delete(
+    `https://sma-sql.herokuapp.com/api/post/${data.postId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+      },
+    }
+  );
 
   if (response.data.message === "Post deleted successfully") {
     return { message: response.data.message, postId: data.postId };
@@ -38,14 +41,16 @@ const deletePost = async (data: IPostDelete) => {
 };
 
 const getAllPostsByProfileId = async (profileId: string) => {
-  const response = await axios.get(`/api/post/all/${profileId}`);
+  const response = await axios.get(
+    `https://sma-sql.herokuapp.com/api/post/all/${profileId}`
+  );
 
   return response.data;
 };
 
 const likePost = async (data: IPostLike) => {
   const response = await axios.post(
-    `/api/like/post/${data.postId}`,
+    `https://sma-sql.herokuapp.com/api/like/post/${data.postId}`,
     {},
     {
       headers: {
@@ -58,11 +63,14 @@ const likePost = async (data: IPostLike) => {
 };
 
 const unLikePost = async (data: IPostLike) => {
-  const response = await axios.delete(`/api/like/post/${data.postId}`, {
-    headers: {
-      Authorization: `Bearer ${data.token}`,
-    },
-  });
+  const response = await axios.delete(
+    `https://sma-sql.herokuapp.com/api/like/post/${data.postId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${data.token}`,
+      },
+    }
+  );
 
   return response.data;
 };

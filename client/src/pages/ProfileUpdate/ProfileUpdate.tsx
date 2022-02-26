@@ -72,7 +72,11 @@ const ProfileUpdate = () => {
         },
       };
 
-      const { data } = await axios.post("/api/upload", formData, config);
+      const { data } = await axios.post(
+        "https://sma-sql.herokuapp.com/api/upload",
+        formData,
+        config
+      );
 
       setFormData((prevState) => ({ ...prevState, profile_image: data.image }));
     } catch (error) {

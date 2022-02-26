@@ -27,7 +27,11 @@ const PostCreate = () => {
           },
         };
 
-        const { data } = await axios.post("/api/upload", formData, config);
+        const { data } = await axios.post(
+          "https://sma-sql.herokuapp.com/api/upload",
+          formData,
+          config
+        );
 
         setImage(data.image);
       } catch (error) {

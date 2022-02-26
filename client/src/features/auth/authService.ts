@@ -2,7 +2,10 @@ import axios from "axios";
 import { IUserData, ILogin } from "./authSlice";
 
 const register = async (userData: IUserData) => {
-  const response = await axios.post("/api/user", userData);
+  const response = await axios.post(
+    "https://sma-sql.herokuapp.com/api/user",
+    userData
+  );
 
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));
@@ -12,7 +15,10 @@ const register = async (userData: IUserData) => {
 };
 
 const login = async (loginData: ILogin) => {
-  const response = await axios.post("/api/user/login", loginData);
+  const response = await axios.post(
+    "https://sma-sql.herokuapp.com/api/user/login",
+    loginData
+  );
 
   if (response.data) {
     localStorage.setItem("user", JSON.stringify(response.data));

@@ -2,30 +2,37 @@ import axios from "axios";
 import { IUpdatedProfile } from "./profileSlice";
 
 const getProfileById = async (id: string) => {
-  const response = await axios.get(`/api/profile/${id}`);
+  const response = await axios.get(
+    `https://sma-sql.herokuapp.com/api/profile/${id}`
+  );
 
   return response.data;
 };
 
 const getProfileByUsername = async (username: string) => {
-  const response = await axios.get(`/api/profile/username/${username}`);
+  const response = await axios.get(
+    `https://sma-sql.herokuapp.com/api/profile/username/${username}`
+  );
 
   return response.data;
 };
 
 export const deleteProfile = async (token: string) => {
-  const response = await axios.delete("/api/user", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  const response = await axios.delete(
+    "https://sma-sql.herokuapp.com/api/user",
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
   return response.data;
 };
 
 export const updateProfile = async (updatedProfile: IUpdatedProfile) => {
   const response = await axios.put(
-    "/api/profile",
+    "https://sma-sql.herokuapp.com/api/profile",
     {
       ...(updatedProfile.username && { username: updatedProfile.username }),
       firstName: updatedProfile.firstName,
