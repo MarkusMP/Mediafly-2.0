@@ -6,6 +6,7 @@
   "password": "postgres",
   "database": "sma-sql",
   "synchronize": true,
+  "url:": "postgres://cxiozfgzfbylpp:5666afdb2bdddc88c7230045b9f75b80953e072a630bcc0a9fdf57d873c83c89@ec2-34-253-116-145.eu-west-1.compute.amazonaws.com:5432/d9lvutuo3d7f58",
   "logging": false,
   "entities": ["src/entities/**/*.{ts,js}"],
   "migrations": ["src/migration/**/*.{ts,js}"],
