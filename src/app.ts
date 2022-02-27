@@ -20,10 +20,6 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
 app.use("/api/user", userRouter);
 app.use("/api/follower", followerRouter);
 app.use("/api/profile", profileRouter);
