@@ -12,6 +12,7 @@ This was build with
           <li>React</li>
       <li>Redux</li>
       <li>SASS/SCSS</li>
+   <li>Docker</li>
   <li>Jest</li>
   <li>React Testing Library</li>
  </ul>
